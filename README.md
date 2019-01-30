@@ -1,3 +1,4 @@
+# Anomaly Detection (Quality Control) 
 
 This is a project report for the final project for the ISEN 614 - Advanced Quality Control class taught in Fall 2016 at Texas A&M University by Dr. Yu Ding.
 
