@@ -1,3 +1,4 @@
+# Anomaly Detection (Quality Control) 
 
 This is a project report for the final project for the ISEN 614 - Advanced Quality Control class taught in Fall 2016 at Texas A&M University by Dr. Yu Ding.
 
@@ -15,7 +16,6 @@ For Principal Component Analysis (PCA), we calculated the vector $y$ of principa
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-%matplotlib inline
 from scipy.stats import chi2
 from scipy.stats.mstats import gmean
 ```
@@ -98,55 +98,9 @@ $$ MDL (l) = n(p-l)log(\frac{𝑎_𝑙}{𝑔_𝑙}) + \frac{l(2p – l)}{2}log(n
 Where $𝑎_𝑙 ,𝑔_𝑙$ are the arithmetic and geometric means respectively of the smallest (p – l) eigenvalues.
 
 
-
-```python
-MDLmin = 100000000  #just some large number to start with
-lmin = 0
-
-MDL = []
-for l in range(p):
-    if l == 0:
-        MDL.append(n*(p-l)*np.log(np.mean(eigvals[0][-1::-1])/gmean(eigvals[0][-1::-1])) + l*(2*p - l)*np.log(n)/2)
-    else:
-        MDL.append(n*(p-l)*np.log(np.mean(eigvals[0][-1:l-1:-1])/gmean(eigvals[0][-1:l-1:-1])) + l*(2*p - l)*np.log(n)/2)
-    if MDL[l] < MDLmin:
-        MDLmin = MDL[l]
-        lmin = l
-```
-
-
-```python
-fig, ax = plt.subplots()
-fig.set_size_inches(12,8)
-ax.plot(MDL)
-ax.set_title('MDL values vs. Principal Components', fontsize = 25)
-ax.set_xlabel('Principal Components', fontsize=20)
-ax.set_ylabel('MDL Values', fontsize=20)
-fig.savefig('images/MDL_values.png')
-plt.show()
-```
-
-
-
-![](images/MDL_values.png)
+![](images/MDL_Values.png)
 
 ### Scree Plot
-
-
-```python
-fig, ax = plt.subplots()
-fig.set_size_inches(12,8)
-ax.plot(eigvals[0])
-ax.set_title('Eigenvalues vs. Principal Components', fontsize = 25)
-ax.set_xlabel('Principal Components', fontsize=20)
-ax.set_ylabel('Eigenvalues', fontsize=20)
-fig.savefig('images/Scree_plot.png')
-plt.show()
-```
-
-
-
-
 ![](images/Scree_plot.png)
 
 ### Prinicipal Component Analysis
@@ -156,12 +110,6 @@ For Principal Component Analysis (PCA), we calculate the vector y, such that
 $$ 𝑦= X.𝑒$$ 
 
 Where $𝑒_j$ is the $j^{𝑡ℎ}$ eigenvector of $S$ and $j \in \{1,..,4\}$.
-
-
-```python
-e = eigvals[1][:,:4]
-y = np.dot(X,e)
-```
 
 As there are n (= 552) samples, $y$ is of shape 552x4
 
@@ -209,97 +157,10 @@ where $y_i$ is one row of the $y$ matrix
 
 $$ S_y = \frac{1}{n-1} (y - \overline{y})^T.(y - \overline{y}) $$
 
-
-```python
-def get_Tsquare(y):
-    ybar = np.mean(y,axis = 0)
-    S_y = np.cov(y, rowvar=False)
-    Tsquare = []
-    n = y.shape[0]
-    for i in range(n):
-        Tsquare.append(np.dot(np.dot((y[i]-ybar).T,np.linalg.inv(S_y)),y[i]-ybar))
-    return Tsquare
-```
-
-
-```python
-Tsquare = get_Tsquare(y)
-```
-
 ### Hotelling Statistic First Iteration
-
-```python
-fig, ax = plt.subplots()
-fig.set_size_inches(12,8)
-ax.plot(Tsquare, c = 'darkblue', linewidth = 0.8)
-ax.scatter(range(1,n+1),Tsquare, c = 'darkblue', marker = 'x', linewidth = 1.2)
-ax.axhline(y = UCL, color = 'darkblue')
-ax.set_title('Hotelling Statistic Control Chart', fontsize = 25)
-ax.set_xlabel('Sample no.', fontsize=20)
-ax.set_ylabel('T-squared Hoteling Statistic', fontsize=20)
-fig.savefig('images/Tsquared_First_Iteration.png')
-plt.show()
-```
-
-
-
-
-
 ![](images/Tsquared_First_Iteration.png)
 In this plot, it can be seen that there are several samples that are out of control
 
 ### Hotelling Statistic In-Control Samples
-
-
-```python
-def PhaseIAnalysis(y):
-    n = y.shape[0]
-    p = y.shape[1]
-    alpha = 0.05
-    UCL = chi2.ppf(1 - alpha,p)
-    Tsquare = get_Tsquare(y)
-
-    for i in range(n):
-        if Tsquare[i] > UCL:
-            y = np.delete(y,(i),axis = 0)
-            return PhaseIAnalysis(y)
-        else:
-            continue
-    return Tsquare
-```
-
-
-```python
-Tsquare = PhaseIAnalysis(y)
-```
-
-
-```python
-n = len(Tsquare)
-fig, ax = plt.subplots()
-fig.set_size_inches(12,8)
-ax.plot(Tsquare, c = 'darkblue', linewidth = 0.8)
-ax.scatter(range(1,n+1),Tsquare, c = 'darkblue', marker = 'x', linewidth = 1.2)
-ax.axhline(y = UCL, color = 'darkblue')
-ax.set_title('Hotelling Statistic Control Chart', fontsize = 25)
-ax.set_xlabel('Sample no.', fontsize=20)
-ax.set_ylabel('T-squared Hoteling Statistic', fontsize=20)
-fig.savefig('images/Tsquared_In-control.png')
-plt.show()
-```
-
-
-
-
-
-
-
-```python
-len(Tsquare)
-```
-
-    427
-
 ![](images/Tsquared_In-control.png)
-
-In this plot, all samples are in control. In total there are 427 in-control samples.
+In this plot, all samples are in control. In total there are 461 in-control samples.
