@@ -123,13 +123,13 @@ ax.plot(MDL)
 ax.set_title('MDL values vs. Principal Components', fontsize = 25)
 ax.set_xlabel('Principal Components', fontsize=20)
 ax.set_ylabel('MDL Values', fontsize=20)
-fig.savefig('images/MDL_values.png')
+fig.savefig('images/MDL_Values.png')
 plt.show()
 ```
 
 
 
-![](images/MDL_values.png)
+![](images/MDL_Values.png)
 
 ### Scree Plot
 
