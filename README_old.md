@@ -1,5 +1,4 @@
-
-# Anomaly Detection (Quality Control)
+# Anomaly Detection (Quality Control) 
 
 This is a project report for the final project for the ISEN 614 - Advanced Quality Control class taught in Fall 2016 at Texas A&M University by Dr. Yu Ding.
 
@@ -124,11 +123,13 @@ ax.plot(MDL)
 ax.set_title('MDL values vs. Principal Components', fontsize = 25)
 ax.set_xlabel('Principal Components', fontsize=20)
 ax.set_ylabel('MDL Values', fontsize=20)
-fig.savefig('images/MDL_values.png')
+fig.savefig('images/MDL_Values.png')
 plt.show()
 ```
 
-![](images/MDL_values.png)
+
+
+![](images/MDL_Values.png)
 
 ### Scree Plot
 
@@ -143,6 +144,9 @@ ax.set_ylabel('Eigenvalues', fontsize=20)
 fig.savefig('images/Scree_plot.png')
 plt.show()
 ```
+
+
+
 
 ![](images/Scree_plot.png)
 
@@ -189,9 +193,6 @@ Here, we have chosen $\alpha = 0.05$. $p$ is the reduced dimension, hence $p = 4
 
 $$ UCL = 9.49 $$
 
-
-### Hotelling Statistic First Iteration
-
 We will now plot the Hotelling $T^2$ statistic for each sample. To isolate in-control data, we will remove out-of-control samples and recalculate the $T^2$ statistic till we are left with only in-control samples.
 
 
@@ -218,7 +219,7 @@ def get_Tsquare(y):
     n = y.shape[0]
     for i in range(n):
         Tsquare.append(np.dot(np.dot((y[i]-ybar).T,np.linalg.inv(S_y)),y[i]-ybar))
-    return np.array(Tsquare)
+    return Tsquare
 ```
 
 
@@ -226,6 +227,7 @@ def get_Tsquare(y):
 Tsquare = get_Tsquare(y)
 ```
 
+### Hotelling Statistic First Iteration
 
 ```python
 fig, ax = plt.subplots()
@@ -240,6 +242,10 @@ fig.savefig('images/Tsquared_First_Iteration.png')
 plt.show()
 ```
 
+
+
+
+
 ![](images/Tsquared_First_Iteration.png)
 In this plot, it can be seen that there are several samples that are out of control
 
@@ -253,10 +259,14 @@ def PhaseIAnalysis(y):
     alpha = 0.05
     UCL = chi2.ppf(1 - alpha,p)
     Tsquare = get_Tsquare(y)
-    if all(Tsquare < UCL):
-        return Tsquare
-    else:
-        return PhaseIAnalysis(y[Tsquare < UCL])
+
+    for i in range(n):
+        if Tsquare[i] > UCL:
+            y = np.delete(y,(i),axis = 0)
+            return PhaseIAnalysis(y)
+        else:
+            continue
+    return Tsquare
 ```
 
 
@@ -282,15 +292,15 @@ plt.show()
 
 
 
+
+
+
 ```python
 len(Tsquare)
 ```
 
-
-
     427
 
-
-
 ![](images/Tsquared_In-control.png)
+
 In this plot, all samples are in control. In total there are 427 in-control samples.
