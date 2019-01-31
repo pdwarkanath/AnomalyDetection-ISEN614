@@ -5,11 +5,11 @@ This is a project report for the final project for the ISEN 614 - Advanced Quali
 
 ## Executive Summary
 
-The  objective of this project was to identify the in-control and out-of-control samples. Due to high dimensionality, the noise components can add up to a great magnitude. As a result, the aggregated noise effect can overwhelm the signal effects thus making it harder to reject the null hypothesis. This phenomenon is known as curse of dimensionality. In this report since the number of dimensions are very high, we used principal component analysis (PCA) as the data reduction tool to reduce the data points and then used the Hotelling $T^2$ chart on the reduced data to isolate the in-control samples.
+The  objective of this project was to identify the in-control and out-of-control samples. Due to high dimensionality, the noise components can add up to a great magnitude. As a result, the aggregated noise effect can overwhelm the signal effects thus making it harder to reject the null hypothesis. This phenomenon is known as curse of dimensionality. In this report since the number of dimensions are very high, we used principal component analysis (PCA) as the data reduction tool to reduce the data points and then used the Hotelling T<sup>2</sup> chart on the reduced data to isolate the in-control samples.
 
 First, we calculated the mean vector and covariance matrix of the given data. Then, we calculated eigenvalues and eigenvectors of S to find the reduced dimension. These eigenvectors were used to form principal components from the original data. For the S matrix, we calculated the eigenvalues and arranged them in descending order. Thereafter, we plotted a graph and observed that the value of L for which MDL is minimum is 35. As 35 Principal Components (PC’s) are not nearly small enough we then used scree plot i.e. the plot of eigenvalues against the number of principal components to further compress data and reduce the Principal Components (PCs). From the scree plot, we observed that there is a bend where the x-axis value is 4. Therefore, we chose only the first 4 principal components for our analysis.
 
-For Principal Component Analysis (PCA), we calculated the vector $y$ of principal components and then performed Phase I analysis on $y$. While performing the Phase I analysis of $y$, we approximated the upper control limit to 9.49 using a $\chi^2$ distribution. We then plotted the Hotelling $T^2$ statistic for each sample. To isolate in-control data, we removed out-of-control samples and recalculated the $T^2$ statistic till we were left with only the in-control samples. i.e there were 461 in-control samples. 
+For Principal Component Analysis (PCA), we calculated the vector y of principal components and then performed Phase I analysis on y. While performing the Phase I analysis of y, we approximated the upper control limit to 9.49 using a &Chi;<sup>2</sup> distribution. We then plotted the Hotelling T<sup>2</sup> statistic for each sample. To isolate in-control data, we removed out-of-control samples and recalculated the T<sup>2</sup> statistic till we were left with only the in-control samples. i.e there were 461 in-control samples. 
 
 
 
@@ -46,7 +46,7 @@ The problem at hand has 552 samples, each with 209 data points.
 
 This can be denoted with X as a matrix of shape 552x209
 
-The $\mu_0$ and $\sum_0$ for this data are not known. Hence, this is a Phase I analysis with a sample size of 1. We will use the mean $\overline{X}$ and covariance matrix $S$ of the samples to estimate $\mu_0$ and $\sum_0$ for the data.
+The &mu;<sub>0</sub> and &Sigma;<sub>0</sub> for this data are not known. Hence, this is a Phase I analysis with a sample size of 1. We will use the mean <span style="text-decoration:overline">X</span> and covariance matrix S of the samples to estimate &mu;<sub>0</sub> and &Sigma;<sub>0</sub> for the data.
 
 Since the number of dimensions is very high, we will first reduce data using principal component analysis and then use the Hotelling chart to isolate in-control data.
 
@@ -58,17 +58,17 @@ X = np.array(book)
 
 ## Data Reduction
 
-For Principal Component Analysis (PCA), we need $\overline{X}$ and $S$ for the sample.
+For Principal Component Analysis (PCA), we need <span style="text-decoration:overline">X</span> and S for the sample.
 
 ### Sample statistics:
 
-$$ \overline{X} = \frac{1}{n} \sum_{i=1}^{n}X_i $$
+![](images/Xbar.png)
 
-where $X_i$ is one row of the matrix
+where X<sub>i</sub> is one row of the matrix
 
-$$ S = \frac{1}{n-1} (X - \overline{X})^T.(X - \overline{X}) $$
+![](images/S.png)
 
-Since $S$ is the covariance matrix of variables, it is of shape 209x209.
+Since S is the covariance matrix of variables, it is of shape 209x209.
 
 Fortunately, numpy has functions available to calculate mean and covariance matrix.
 
@@ -84,7 +84,7 @@ S = np.cov(X, rowvar=False)
 
 ### Eigen Values
 
-We will calculate eigenvalues and eigenvectors of $S$ to find the reduced dimension. These eigenvectors will be used to form principal components from the original data
+We will calculate eigenvalues and eigenvectors of S to find the reduced dimension. These eigenvectors will be used to form principal components from the original data
 
 
 ```python
@@ -95,9 +95,9 @@ eigvals = np.linalg.eig(S)
 
 We plot a graph using the formula:
 
-$$ MDL (l) = n(p-l)log(\frac{𝑎_𝑙}{𝑔_𝑙}) + \frac{l(2p – l)}{2}log(n) $$
+![](images/MDL.png)
 
-Where $𝑎_𝑙 ,𝑔_𝑙$ are the arithmetic and geometric means respectively of the smallest (p – l) eigenvalues.
+Where a<sub>l</sub>, g<sub>l</sub> are the arithmetic and geometric means respectively of the smallest (p – l) eigenvalues.
 
 
 
@@ -150,9 +150,9 @@ plt.show()
 
 For Principal Component Analysis (PCA), we calculate the vector y, such that
 
-$$ 𝑦= X.𝑒$$ 
+![](images/y.png)
 
-Where $𝑒_j$ is the $j^{𝑡ℎ}$ eigenvector of $S$ and $j \in \{1,..,4\}$.
+Where e<sub>j</sub> is the j<sup>th</sup> eigenvector of S and j &epsilon; {1,..,4}.
 
 
 ```python
@@ -160,9 +160,9 @@ e = eigvals[1][:,:4]
 y = np.dot(X,e)
 ```
 
-As there are n (= 552) samples, $y$ is of shape 552x4
+As there are n (= 552) samples, y is of shape 552x4
 
-We will now perform Phase I analysis on $y$. 
+We will now perform Phase I analysis on y. 
 
 ## Phase I Analysis
 
@@ -170,9 +170,9 @@ We will now perform Phase I analysis on $y$.
 
 ### Upper Control Limit
 
-For Phase I analysis of $y$, we approximate the upper control limit using
+For Phase I analysis of y, we approximate the upper control limit using
 
-$$ 𝑈𝐶𝐿 = \chi^2_{1 −\alpha}  (p) $$
+![](images/UCL.png)
 
 
 ```python
@@ -185,29 +185,29 @@ print(f'UCL = {UCL}')
     UCL = 9.487729036781154
     
 
-Here, we have chosen $\alpha = 0.05$. $p$ is the reduced dimension, hence $p = 4$. looking up the chi-square distribution table
+Here, we have chosen &alpha; = 0.05. p is the reduced dimension, hence p = 4. looking up the chi-square distribution table
 
-$$ UCL = 9.49 $$
+UCL = 9.49
 
 
 ### Hotelling Statistic First Iteration
 
-We will now plot the Hotelling $T^2$ statistic for each sample. To isolate in-control data, we will remove out-of-control samples and recalculate the $T^2$ statistic till we are left with only in-control samples.
+We will now plot the Hotelling T<sup>2</sup> statistic for each sample. To isolate in-control data, we will remove out-of-control samples and recalculate the T<sup>2</sup> statistic till we are left with only in-control samples.
 
 
-To calculate $T^2$ statistic, we use:
+To calculate T<sup>2</sup> statistic, we use:
 
-$$ T^2 = (y_i - \overline{y})^T S_y^{-1} (y_i - \overline{y}) $$
+![](images/Tsq.png)
 
-Where $\overline{y}$ is the mean of $y$, $S$ is the covariance matrix of $y$ and $i \in \{1,2, ..., n\}$ is the sample number
+Where <span style="text-decoration:overline">y</span> is the mean of y, S<sub>y</sub> is the covariance matrix of y and i &epsilon; {1,2, ..., n} is the sample number.
 
 These can be calculated the same way as we did for X
 
-$$ \overline{y} = \frac{1}{n} \sum_{i=1}^{n}y_i $$
+![](images/ybar.png)
 
-where $y_i$ is one row of the $y$ matrix
+where y<sub>i</sub> is one row of the y matrix
 
-$$ S_y = \frac{1}{n-1} (y - \overline{y})^T.(y - \overline{y}) $$
+![](images/Sy.png)
 
 
 ```python
@@ -241,6 +241,7 @@ plt.show()
 ```
 
 ![](images/Tsquared_First_Iteration.png)
+
 In this plot, it can be seen that there are several samples that are out of control
 
 ### Hotelling Statistic In-Control Samples
