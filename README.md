@@ -152,7 +152,7 @@ For Principal Component Analysis (PCA), we calculate the vector y, such that
 
 ![](images/y.png)
 
-Where e<sub>j</sub> is the j<sup>th</sup> eigenvector of S and j &epsilon; {1,..,4}.
+Where e<sub>j</sub> is the j<sup>th</sup> eigenvector of S and j &Epsilon; {1,..,4}.
 
 
 ```python
@@ -199,7 +199,7 @@ To calculate T<sup>2</sup> statistic, we use:
 
 ![](images/Tsq.png)
 
-Where <span style="text-decoration:overline">y</span> is the mean of y, S<sub>y</sub> is the covariance matrix of y and i &epsilon; {1,2, ..., n} is the sample number.
+Where <span style="text-decoration:overline">y</span> is the mean of y, S<sub>y</sub> is the covariance matrix of y and i &Epsilon; {1,2, ..., n} is the sample number.
 
 These can be calculated the same way as we did for X
 
@@ -294,4 +294,5 @@ len(Tsquare)
 
 
 ![](images/Tsquared_In-control.png)
+
 In this plot, all samples are in control. In total there are 427 in-control samples.
