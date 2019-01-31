@@ -1,1 +1,0 @@
-![](images/MDL_values.png)
